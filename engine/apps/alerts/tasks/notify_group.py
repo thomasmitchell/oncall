@@ -62,9 +62,11 @@ def notify_group_task(alert_group_pk, escalation_policy_snapshot_order=None):
                 user=user,
                 important=escalation_policy_step == EscalationPolicy.STEP_NOTIFY_GROUP_IMPORTANT,
             )
-            usergroup_notification_plan += "\n_{} (".format(
-                step.get_user_notification_message_for_thread_for_usergroup(user, notification_policies.first())
-            )
+            first_policy = notification_policies.first()
+            if first_policy:
+                usergroup_notification_plan += "\n_{} (".format(
+                    step.get_user_notification_message_for_thread_for_usergroup(user, first_policy)
+                )
             notification_channels = []
             if notification_policies.filter(step=UserNotificationPolicy.Step.NOTIFY).count() == 0:
                 usergroup_notification_plan += "Empty notifications"
