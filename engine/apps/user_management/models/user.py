@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from emoji import demojize
 
 from apps.schedules.tasks import drop_cached_ical_for_custom_events_for_organization
+from apps.user_management.tasks import start_create_default_user_notification_policies
 from common.constants.role import Role
 from common.public_primary_keys import generate_public_primary_key, increase_public_primary_key_length
 
@@ -50,23 +51,24 @@ class UserManager(models.Manager):
     def sync_for_organization(organization, api_users: list[dict]):
         grafana_users = {user["userId"]: user for user in api_users}
         existing_user_ids = set(organization.users.all().values_list("user_id", flat=True))
-
-        # create missing users
-        users_to_create = tuple(
-            User(
-                organization_id=organization.pk,
-                user_id=user["userId"],
-                email=user["email"],
-                name=user["name"],
-                username=user["login"],
-                role=Role[user["role"].upper()],
-                avatar_url=user["avatarUrl"],
-            )
-            for user in grafana_users.values()
-            if user["userId"] not in existing_user_ids
-        )
+        users_to_create = []
+        grafana_user_ids = []
+        for user in grafana_users.values():
+            if user["userId"] not in existing_user_ids:
+                users_to_create.append(
+                    User(
+                        organization_id=organization.pk,
+                        user_id=user["userId"],
+                        email=user["email"],
+                        name=user["name"],
+                        username=user["login"],
+                        role=Role[user["role"].upper()],
+                        avatar_url=user["avatarUrl"],
+                    )
+                )
+                grafana_user_ids.append(user["userId"])
         organization.users.bulk_create(users_to_create, batch_size=5000)
-
+        start_create_default_user_notification_policies(organization_id=organization.id, user_ids=grafana_user_ids)
         # delete excess users
         user_ids_to_delete = existing_user_ids - grafana_users.keys()
         organization.users.filter(user_id__in=user_ids_to_delete).delete()
