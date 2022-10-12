@@ -173,6 +173,7 @@ class Users extends React.Component<UsersProps, UsersState> {
     return (
       <PageErrorHandlingWrapper
         errorData={errorData}
+        store={store}
         objectName="user"
         pageName="users"
         itemNotFoundMessage={`User with id=${query?.id} is not found. Please select user from the list.`}

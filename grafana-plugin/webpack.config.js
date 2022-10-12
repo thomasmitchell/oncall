@@ -133,7 +133,10 @@ module.exports.getWebpackConfig = (config, options) => {
         allowAsyncCycles: false,
         // set the current working directory for displaying module paths
         cwd: process.cwd(),
-      })
+      }),
+      new webpack.DefinePlugin({
+        'process.env.ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    }),
       // new BundleAnalyzerPlugin(),
     ],
 

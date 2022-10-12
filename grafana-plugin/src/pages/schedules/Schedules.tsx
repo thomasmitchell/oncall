@@ -169,6 +169,7 @@ class SchedulesPage extends React.Component<SchedulesPageProps, SchedulesPageSta
     return (
       <PageErrorHandlingWrapper
         errorData={errorData}
+        store={store}
         objectName="schedule"
         pageName="schedules"
         itemNotFoundMessage={`Schedule with id=${query?.id} is not found. Please select schedule from the list.`}

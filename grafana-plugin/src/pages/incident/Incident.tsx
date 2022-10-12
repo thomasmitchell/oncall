@@ -126,11 +126,7 @@ class IncidentPage extends React.Component<IncidentPageProps, IncidentPageState>
     }
 
     return (
-      <PageErrorHandlingWrapper
-        errorData={errorData}
-        objectName="alert group"
-        pageName="incidents"
-      >
+      <PageErrorHandlingWrapper store={store} errorData={errorData} objectName="alert group" pageName="incidents">
         {() =>
           errorData.isNotFoundError ? (
             <div className={cx('root')}>

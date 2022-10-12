@@ -132,6 +132,7 @@ class Integrations extends React.Component<IntegrationsProps, IntegrationsState>
 
     return (
       <PageErrorHandlingWrapper
+        store={store}
         errorData={errorData}
         objectName="integration"
         pageName="integrations"

@@ -108,6 +108,7 @@ class OutgoingWebhooks extends React.Component<OutgoingWebhooksProps, OutgoingWe
 
     return (
       <PageErrorHandlingWrapper
+      store={store}
         errorData={errorData}
         objectName="outgoing webhook"
         pageName="outgoing_webhooks"

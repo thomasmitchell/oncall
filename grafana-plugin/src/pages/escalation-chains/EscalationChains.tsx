@@ -136,6 +136,7 @@ class EscalationChainsPage extends React.Component<EscalationChainsPageProps, Es
 
     return (
       <PageErrorHandlingWrapper
+        store={store}
         errorData={errorData}
         objectName="escalation"
         pageName="escalations"
