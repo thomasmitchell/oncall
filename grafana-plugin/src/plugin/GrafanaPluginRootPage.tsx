@@ -33,9 +33,9 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isoWeek);
 
-import 'style/vars.css';
-import 'style/global.css';
-import 'style/utils.css';
+import 'style/vars.scss';
+import 'style/global.scss';
+import 'style/utils.scss';
 
 import { getQueryParams, isTopNavbar } from './GrafanaPluginRootPage.helpers';
 

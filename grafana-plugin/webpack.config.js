@@ -98,7 +98,7 @@ module.exports.getWebpackConfig = (config, options) => {
         },
 
         {
-          test: /\.module\.scss$/i,
+          test: /\.scss$/i,
           exclude: /node_modules/,
           use: [
             'style-loader',
