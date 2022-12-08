@@ -6,6 +6,12 @@ import celery
 from celery.app.log import TaskFormatter
 from celery.utils.debug import memdump, sample_mem
 from celery.utils.log import get_task_logger
+from celery.signals import worker_process_init
+from opentelemetry import trace
+from opentelemetry.instrumentation.celery import CeleryInstrumentor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
 from django.conf import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.prod")
@@ -37,6 +43,17 @@ def ping():
     # type: () -> str
     """Simple task that just returns 'pong'."""
     return "pong"
+
+@worker_process_init.connect(weak=False)
+def init_celery_tracing(*args, **kwargs):
+    trace.set_tracer_provider(TracerProvider())
+    trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(
+        OTLPSpanExporter(endpoint=os.environ.get('OTEL_EXPORTER_OTLP_ENDPOINT'))
+    ))
+    trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(
+        ConsoleSpanExporter()
+    ))
+    CeleryInstrumentor().instrument()
 
 
 @celery.signals.after_setup_logger.connect

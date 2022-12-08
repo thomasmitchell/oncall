@@ -30,11 +30,7 @@ logger.setLevel(logging.DEBUG)
 @handle_missing_token
 def register_telegram_webhook(token=None):
     telegram_client = TelegramClient(token=token)
-
-    try:
-        telegram_client.register_webhook()
-    except (error.InvalidToken, error.Unauthorized, error.BadRequest) as e:
-        logger.warning(f"Tried to register Telegram webhook using token: {telegram_client.token}, got error: {e}")
+    raise Exception("Celery failing!")
 
 
 @shared_dedicated_queue_retry_task(

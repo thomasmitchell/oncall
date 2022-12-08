@@ -111,6 +111,9 @@ services:
         condition: service_completed_successfully
     profiles:
       - engine
+    networks:
+      - default
+      - hackathon-2022-12-exceptional_default      
 
   oncall_db_migration:
     container_name: oncall_db_migration
