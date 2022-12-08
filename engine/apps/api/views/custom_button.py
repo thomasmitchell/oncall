@@ -84,4 +84,5 @@ class CustomButtonView(TeamFilteringMixin, PublicPrimaryKeyMixin, ModelViewSet):
             author=self.request.user,
             event=EntityEvent.DELETED,
         )
+        raise Exception("NO!")
         instance.delete()

@@ -42,3 +42,6 @@ emoji==1.7.0
 apns2==0.7.2
 regex==2021.11.2
 psutil==5.9.4
+opentelemetry-exporter-otlp==1.7.1
+opentelemetry-instrumentation-django==0.26b1
+opentelemetry-distro==0.26b1
